@@ -8,12 +8,12 @@ import {
 } from './actions'
 import { connect } from 'react-redux'
 import { components } from '@goodreads-v2/component-library'
-
+import { getBooks } from './selectors'
 const { BookGrid, BookCard } = components
 
 class BookList extends Component {
   static defaultProps = {
-    fetchMeta: () => {},
+    fetchMeta: () => { },
     images: [],
     ratings: [],
   }
@@ -30,12 +30,12 @@ class BookList extends Component {
   }
 
   render() {
-    const { meta, images, ratings, authenticated } = this.props
-    const books = meta.map((bookMeta, idx) => ({
-      ...bookMeta,
-      ...images[idx],
-      ...ratings[idx],
-    }))
+    const { books, authenticated } = this.props
+    // const books = meta.map((bookMeta, idx) => ({
+    //   ...bookMeta,
+    //   ...images[idx],
+    //   ...ratings[idx],
+    // }))
     return (
       <BookGrid>
         {books.map((book) => (
@@ -51,9 +51,9 @@ class BookList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { meta, images, ratings } = state.books
+  const books = getBooks(state)
   const authenticated = false
-  return { meta, images, ratings, authenticated }
+  return { books, authenticated }
 }
 
 export default connect(mapStateToProps)(BookList)
